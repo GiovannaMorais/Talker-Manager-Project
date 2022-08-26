@@ -4,6 +4,12 @@ const talkerManager = require('./talkerManager');
 const { generateToken } = require('./utils/generateToken');
 const validateEmail = require('./middlewares/validateEmail');
 const validatePassword = require('./middlewares/validatePassword');
+const validateAuthorization = require('./middlewares/validateAuthorization');
+const validateName = require('./middlewares/validateName');
+const validateAge = require('./middlewares/validateAge');
+const validateWatchedAt = require('./middlewares/validateWatchedAt');
+const validateRate = require('./middlewares/validateRate');
+const validateTalk = require('./middlewares/validateTalk');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,14 +37,22 @@ app.get('/talker/:id', async (req, res) => {
     return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
-app.post('/login', validateEmail, validatePassword, (req, res) => {
-  const { email, password } = req.body;
-  if ([email, password].includes(undefined)) {
-    return res.status(401).json({ message: 'Campos ausentes!' });
-  }
+app.post('/login', validateEmail, validatePassword, (_req, res) => {
+  // const { email, password } = req.body;
   const token = generateToken();
   return res.status(HTTP_OK_STATUS).json({ token });
 });
+
+app.post(
+  '/talker',
+  validateTalk,
+  validateAuthorization,
+  validateName,
+  validateAge,
+  validateWatchedAt,
+  validateRate,
+  talkerManager.addNewTalker,
+);
 
 app.listen(PORT, () => {
   console.log('Online');
