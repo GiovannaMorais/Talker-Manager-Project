@@ -45,13 +45,14 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
 
 app.post(
   '/talker',
-  validateTalk,
   validateAuthorization,
   validateName,
   validateAge,
+  validateTalk,
   validateWatchedAt,
   validateRate,
   talkerManager.addNewTalker,
+ 
 );
 
 app.listen(PORT, () => {
