@@ -19,8 +19,6 @@ const getAllTalkers = async () => {
   };
   const addNewTalker = async (req, res) => {
     const { name, age, talk } = req.body;
-    console.log('req.body', req.body);
-    // const talkerReq = req.body;
     const talkersList = await getAllTalkers();
     const newTalker = { id: talkersList.length + 1, name, age, talk };
     // talkersList.push(newTalker);
@@ -29,7 +27,26 @@ const getAllTalkers = async () => {
     return res.status(201).json(newTalker);
 };
 
+const changedTalkers = async (req, res) => {
+    const { name, age, talk } = req.body;
+    const { id } = req.params;
+    const talkersList = await getAllTalkers();
+
+    const talker = talkersList.find((t) => t.id === Number(id));
+    // console.log('talker', talker);
+    if (talker) {
+        const index = talkersList.indexOf(talker);
+        const editTalker = { id: Number(id), name, age, talk };
+        talkersList.splice(index, 1, editTalker);
+        await fs.writeFile(join(__dirname, path), JSON.stringify(talkersList));
+        res.status(200).json(editTalker);
+      } else {
+        res.sendStatus(400);
+      }  
+    };
+
 module.exports = {
     getAllTalkers,
     addNewTalker,
+    changedTalkers,
 };

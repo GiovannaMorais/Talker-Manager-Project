@@ -52,8 +52,15 @@ app.post(
   validateWatchedAt,
   validateRate,
   talkerManager.addNewTalker,
- 
 );
+
+app.put('/talker/:id', validateAuthorization,
+validateName,
+validateAge,
+validateTalk,
+validateWatchedAt,
+validateRate, 
+talkerManager.changedTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');
