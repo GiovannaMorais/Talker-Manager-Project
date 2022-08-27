@@ -39,14 +39,27 @@ const changedTalkers = async (req, res) => {
         const editTalker = { id: Number(id), name, age, talk };
         talkersList.splice(index, 1, editTalker);
         await fs.writeFile(join(__dirname, path), JSON.stringify(talkersList));
-        res.status(200).json(editTalker);
-      } else {
-        res.sendStatus(400);
-      }  
+        return res.status(200).json(editTalker);
+      } 
+        return res.sendStatus(400);
+    };
+
+    const deleteTalkers = async (req, res) => {
+        const { id } = req.params;
+        const talkersList = await getAllTalkers();
+
+    const talker = talkersList.find((t) => t.id === Number(id));
+    if (talker) {
+        const index = talkersList.indexOf(talker);
+        talkersList.splice(index, 1);
+        await fs.writeFile(join(__dirname, path), JSON.stringify(talkersList));
+        return res.status(204).json(talkersList);
+    }
     };
 
 module.exports = {
     getAllTalkers,
     addNewTalker,
     changedTalkers,
+    deleteTalkers,
 };

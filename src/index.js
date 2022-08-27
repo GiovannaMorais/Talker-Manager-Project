@@ -62,6 +62,8 @@ validateWatchedAt,
 validateRate, 
 talkerManager.changedTalkers);
 
+app.delete('/talker/:id', validateAuthorization, talkerManager.deleteTalkers);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
