@@ -26,6 +26,7 @@ app.get('/talker', async (_req, res) => {
   const talker = await talkerManager.getAllTalkers();
   return res.status(HTTP_OK_STATUS).json(talker);
 });
+app.get('/talker/search', validateAuthorization, talkerManager.findTalkers); 
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
@@ -38,7 +39,6 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', validateEmail, validatePassword, (_req, res) => {
-  // const { email, password } = req.body;
   const token = generateToken();
   return res.status(HTTP_OK_STATUS).json({ token });
 });
